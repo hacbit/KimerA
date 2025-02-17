@@ -1,0 +1,33 @@
+{
+    "name": "KimerA",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b3487a7fb10944640b63e38892929aba",
+        "GUID:4b8ac830ae851be4fab3112d77228283"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "",
+            "define": "KIMERA_NEWTONSOFTJSON_SUPPORT"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "",
+            "define": "KIMERA_INPUTSYSTEM_SUPPORT"
+        },
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "KIMERA_ADDRESSABLES_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}

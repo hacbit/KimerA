@@ -1,0 +1,7 @@
+{
+    "Csprojs": [
+        "Assembly-CSharp.csproj",
+        "Assembly-CSharp-Editor.csproj",
+        "KimerA*.csproj"
+    ]
+}

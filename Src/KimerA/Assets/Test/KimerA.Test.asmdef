@@ -1,0 +1,17 @@
+{
+    "name": "KimerA.Test",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fb94ca66e40477d4aa9ec994fb095980",
+        "GUID:4b8ac830ae851be4fab3112d77228283"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

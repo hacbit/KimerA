@@ -1,0 +1,12 @@
+{
+    "name": "com.framework.kimera",
+    "displayName": "KimerA",
+    "author": { "name": "KimerA, Inc." },
+    "version": "0.0.1",
+    "unity": "2022.3",
+    "description": "Provides an easily removable, versatile frame for Unity projects.",
+    "keywords": [ "framework", "KimerA" ],
+    "license": "MIT",
+    "category": "Framework",
+    "dependencies": {}
+}

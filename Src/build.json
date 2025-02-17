@@ -1,0 +1,6 @@
+{
+    "analyzers": [
+        "KimerA.Analysis",
+        "KimerA.Analysis.ECS"
+    ]
+}
