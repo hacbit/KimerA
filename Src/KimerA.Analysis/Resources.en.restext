@@ -1,0 +1,31 @@
+Archive_KimerA001_Title = ArchiveTo Target Without ArchiveReceiverAttribute
+Archive_KimerA001_MessageFormat	= The type parameter '{0}' of ArchiveTo<> does not have the ArchiveReceiverAttribute
+Archive_KimerA001_Description = The type parameter of ArchiveTo<> must have the ArchiveReceiverAttribute.
+
+Archive_KimerA002_Title = The Class Has ArchiveReceiverAttribute Is Not Partial
+Archive_KimerA002_MessageFormat = The class '{0}' has the ArchiveReceiverAttribute but is not partial
+Archive_KimerA002_Description = The class with the ArchiveReceiverAttribute must be partial.
+
+Archive_KimerA003_Title	= The Class Has ArchiveToAttribute<> Is Not Partial
+Archive_KimerA003_MessageFormat = The class '{0}' has the ArchiveToAttribute<> but is not partial
+Archive_KimerA003_Description = The class with the ArchiveToAttribute<> must be partial.
+
+Archive_KimerA004_Title = The Class Cannot Have Both ArchiveToAttribute<> And ArchiveReceiverAttribute
+Archive_KimerA004_MessageFormat = The class '{0}' cannot have both ArchiveToAttribute<> and ArchiveReceiverAttribute
+Archive_KimerA004_Description = The class cannot have both ArchiveToAttribute<> and ArchiveReceiverAttribute.
+
+Archive_KimerA005_Title = The Archivable Member Not In ArchiveTo Class
+Archive_KimerA005_MessageFormat = The member '{0}' has the ArchivableAttribute but is not in a class with the ArchiveToAttribute<>
+Archive_KimerA005_Description = The member with the ArchivableAttribute must be in a class with the ArchiveToAttribute<>.
+
+Archive_KimerA006_Title = The Archivable Field Cannot Be ReadOnly
+Archive_KimerA006_MessageFormat = The field '{0}' has ArchivableAttribute cannot be readonly
+Archive_KimerA006_Description = The field with the ArchivableAttribute cannot be readonly.
+
+Archive_KimerA007_Title = The Archivable Property Must Have A Setter
+Archive_KimerA007_MessageFormat = The property '{0}' has ArchivableAttribute must have a setter
+Archive_KimerA007_Description = The property with the ArchivableAttribute must have a setter.
+
+TypeConstraint_KimerA010_Title = Invalid Argument Type
+TypeConstraint_KimerA010_MessageFormat = Parameter type '{0}' does not satisfy the constraint in TypeConstraintAttribute. Type '{0}' needs to be one of '{1}' or derived from one of them.
+TypeConstraint_KimerA010_Description = The parameter type does not satisfy the constraints in the TypeConstraintAttribute.

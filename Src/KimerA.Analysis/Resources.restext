@@ -1,0 +1,31 @@
+Archive_KimerA001_Title = ArchiveTo 的目标缺少 ArchiveReceiverAttribute
+Archive_KimerA001_MessageFormat = ArchiveTo<> 的类型参数 '{0}' 所指向的类型缺少 ArchiveReceiverAttribute
+Archive_KimerA001_Description = ArchiveTo<> 的类型参数对应的类型必须有 ArchiveReceiverAttribute。
+
+Archive_KimerA002_Title = 具有 ArchiveReceiverAttribute 的类不是分部类
+Archive_KimerA002_MessageFormat = 类 '{0}' 具有 ArchiveReceiverAttribute，但不是分部类
+Archive_KimerA002_Description = 具有 ArchiveReceiverAttribute 的类必须是分部类。
+
+Archive_KimerA003_Title = 具有 ArchiveToAttribute<> 的类不是分部类
+Archive_KimerA003_MessageFormat = 类 '{0}' 具有 ArchiveToAttribute<>，但不是分部类
+Archive_KimerA003_Description = 具有 ArchiveToAttribute<> 的类必须是分部类。
+
+Archive_KimerA004_Title = 类不能同时具有 ArchiveToAttribute<> 和 ArchiveReceiverAttribute
+Archive_KimerA004_MessageFormat = 类 '{0}' 不能同时具有 ArchiveToAttribute<> 和 ArchiveReceiverAttribute
+Archive_KimerA004_Description = 类不能同时具有 ArchiveToAttribute<> 和 ArchiveReceiverAttribute。
+
+Archive_KimerA005_Title = 可存档成员不在 ArchiveTo 类中
+Archive_KimerA005_MessageFormat = 成员 '{0}' 具有 ArchivableAttribute，但不在具有 ArchiveToAttribute<> 的类中
+Archive_KimerA005_Description = 具有 ArchivableAttribute 的成员必须在具有 ArchiveToAttribute<> 的类中。
+
+Archive_KimerA006_Title = 可存档字段不能是只读的
+Archive_KimerA006_MessageFormat = 具有 ArchivableAttribute 的字段 '{0}' 不能是只读的
+Archive_KimerA006_Description = 具有 ArchivableAttribute 的字段不能是只读的。
+
+Archive_KimerA007_Title = 可存档属性必须有一个设置器
+Archive_KimerA007_MessageFormat = 具有 ArchivableAttribute 的属性 '{0}' 必须有一个设置器
+Archive_KimerA007_Description = 具有 ArchivableAttribute 的属性必须有一个设置器。
+
+TypeConstraint_KimerA010_Title = 无效的参数类型
+TypeConstraint_KimerA010_MessageFormat = 参数类型 '{0}' 不满足 TypeConstraintAttribute 中的约束。类型 '{0}' 需要是 '{1}' 之一或从其中之一派生。
+TypeConstraint_KimerA010_Description = 参数类型不满足 TypeConstraintAttribute 中的约束。

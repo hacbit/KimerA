@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-public struct Test
+struct Test
 {
     public int A;
 
@@ -16,7 +16,7 @@ public struct Test
     }
 }
 
-public partial class CollectionsMarshalTest : MonoBehaviour
+partial class CollectionsMarshalTest : MonoBehaviour
 {
     public List<Test> list = new(10000);
     public List<Test> list2 = new(10000);

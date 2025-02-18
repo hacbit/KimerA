@@ -125,11 +125,38 @@ namespace KimerA.Editor.CsprojModifier
             m_Properties = properties;
         }
 
+        private static FileSystemWatcher? m_Watcher;
+
         [InitializeOnLoadMethod]
         private static void Init()
         {
             LoadConfigs();
             ChangeCsprojs();
+            SetupFileSystemWatcher();
+        }
+
+        private static void SetupFileSystemWatcher()
+        {
+            m_Watcher = new(Directory.GetParent(Application.dataPath).FullName, "*.csproj")
+            {
+                NotifyFilter = NotifyFilters.LastWrite
+            };
+            m_Watcher.Changed += OnCsprojChanged;
+            m_Watcher.EnableRaisingEvents = true;
+        }
+
+        private static void OnCsprojChanged(object sender, FileSystemEventArgs e)
+        {
+            m_Watcher!.EnableRaisingEvents = false;
+
+            try
+            {
+                ChangeCsprojs();
+            }
+            finally
+            {
+                m_Watcher.EnableRaisingEvents = true;
+            }
         }
 
         private static void ChangeCsprojs()
@@ -240,7 +267,7 @@ namespace KimerA.Editor.CsprojModifier
         [Serializable]
         private class CsprojsToChange
         {
-            public string[] Csprojs;
+            public required string[] Csprojs;
         }
     }
 }

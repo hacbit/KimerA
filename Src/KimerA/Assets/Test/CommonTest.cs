@@ -13,7 +13,7 @@ struct Point
     public Point() => (X, Y) = (1, 1);
 }
 
-public sealed class CommonTest : MonoBehaviour
+sealed class CommonTest : MonoBehaviour
 {
     public required int? Value { get; init; }
 

@@ -1,4 +1,3 @@
-#pragma warning disable RS2008 // Enable analyzer release tracking
 #pragma warning disable RS1008 // 不要将每次编译的数据存储到诊断分析器的字段中
 
 using System.Collections.Generic;
@@ -14,17 +13,7 @@ namespace KimerA.Analysis
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class TypeConstraintAnalyzer : DiagnosticAnalyzer
     {
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-            id: "KIMERA003",
-            title: "无效的参数类型",
-            messageFormat: "参数类型 '{0}' 不满足 TypeConstraintAttribute 中的约束条件, 类型 '{0}' 需要为 '{1}' 中的一种, 或派生于其中之一。",
-            category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
-            isEnabledByDefault: true,
-            description: "参数类型不满足 TypeConstraintAttribute 中的约束条件."
-        );
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(DiagnosticDefine.TypeConstraint_KimerA010);
 
         private static readonly Dictionary<IMethodSymbol, Dictionary<IParameterSymbol, ImmutableHashSet<ISymbol>>> MethodConstraints = new(SymbolEqualityComparer.Default);
 
@@ -98,7 +87,7 @@ namespace KimerA.Analysis
 
                     if (isValid is false)
                     {
-                        var diagnostic = Diagnostic.Create(Rule, argument.GetLocation(), argumentType, string.Join(", ", allowedTypes.Select(type => type.Name)));
+                        var diagnostic = Diagnostic.Create(DiagnosticDefine.TypeConstraint_KimerA010, argument.GetLocation(), argumentType, string.Join(", ", allowedTypes.Select(type => type.Name)));
                         context.ReportDiagnostic(diagnostic);
                     }
                 }

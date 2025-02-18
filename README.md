@@ -1,6 +1,6 @@
 # KimerA
 
-KimerA 工具集提供了一些实用工具类，和一些 Unity 编辑器拓展插件。除此之外，本工具集也致力于提供比 Unity 本身所支持的更高版本的的 Dotnet / C# 的一些特性。
+KimerA 工具集提供了一些实用工具类，和一些 Unity 编辑器拓展插件。除此之外，本工具集也致力于提供比 Unity 本身所支持的更高版本的 Dotnet / C# 的一些特性。
 
 
 
@@ -39,6 +39,8 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 
 使用方法见上文。
 
+>   **注：不支持全部特性，比如主构造函数，集合表达式等**
+
 如果你使用**程序集（Assembly Definition）**，并且程序集也要**使用高版本特性**，需要在该 .asmdef 文件同目录下也创建一个 `csc.rsp` 文件，并写入需要的 **Roslyn 编译参数**。
 
 然后找到 `Assets/Plugins/KimerA/CsprojModifier/CsprojsToChange.json` 文件，其默认的内容应该是：
@@ -56,4 +58,49 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 将 Unity 给你的程序集自动生成的 .csproj 文件的文件名**添加到这个 json 文件**中即可，**支持正则表达式**。
 
 工具集的 Csproj Modifier 工具会在每次代码编译后读取该文件并修改指定的 .csproj 文件以支持你的 IDE。
+
+
+
+### 易拆装的模块
+
+以工具集内置的存档系统为例：
+
+你需要把需要存档的字段添加 `[Archivable]` ，并且需要给这个字段所在的 class 添加 `[ArchiveTo<>]` ，该通用 Attribute 的泛型参数需要接受具有 `[ArchiveReceiver]` 的类。
+
+然后只需要在某一处调用注册函数即可（如果是 Mono 类，一般考虑 Awake；如果是普通类，直接在构造函数注册即可）。
+
+你可以很轻松的就把原有代码移植过来，并且几乎不会影响你的代码。
+
+```cs
+using KimerA.Utils;
+using UnityEngine;
+
+[ArchiveTo<MyArchive>]
+public partial class TestArchive : MonoBehaviour
+{
+    [Archivable]
+    private int ArchiveField = 0;
+    [Archivable]
+    public string ArchiveProperty { get; private set; } = "Hello";
+    
+    private void Awake()
+    {
+		MyArchive.Instance.TryRegister(this);
+    }
+    
+    private void Start()
+    {
+        MyArchive.Instance.Save();
+        ArchiveField = 114514;
+        ArchiveProperty = "1919810";
+        MyArchive.Instance.Load();
+        Debug.Assert(ArchiveField is 0, "Load Field Failed");
+        Debug.Assert(ArchiveProperty is "Hello", "Load Property Failed");
+        Debug.Log("Test Passed");
+    }
+}
+
+[ArchiveReceiver]
+public partial class MyArchive {}
+```
 
