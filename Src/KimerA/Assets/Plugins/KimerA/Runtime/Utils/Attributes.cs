@@ -63,5 +63,12 @@ namespace KimerA.Utils
     }
 #endregion
 
+    /// <summary>
+    /// 允许一个字段或属性未被使用
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    public sealed class AllowUnusedAttribute : Attribute
+    {
 
+    }
 }

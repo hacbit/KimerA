@@ -8,8 +8,8 @@ namespace KimerA
     /// </summary>
     public interface IArchiveSender
     {
-        object Save();
+        string Save();
 
-        void Load(Func<Type, object?> converter);
+        void Load(string value);
     }
 }

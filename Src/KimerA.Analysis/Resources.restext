@@ -26,6 +26,14 @@ Archive_KimerA007_Title = 可存档属性必须有一个设置器
 Archive_KimerA007_MessageFormat = 具有 ArchivableAttribute 的属性 '{0}' 必须有一个设置器
 Archive_KimerA007_Description = 具有 ArchivableAttribute 的属性必须有一个设置器。
 
+Archive_KimerA008_Title = 类型指定了存档接收器但是没有注册
+Archive_KimerA008_MessageFormat = 类 '{0}' 使用了 ArchiveToAttribute<> 但没有注册到指定的 '{1}' 类上
+Archive_KimerA008_Description = 具有 ArchiveToAttribute<> 的类应该注册到指定类
+
+Archive_KimerA009_Title = 类型指定了存档接收器但是注册到另一个接收器上
+Archive_KimerA009_MessageFormat = 类 '{0}' 使用 ArchiveToAttribute<> 指定了接收器类型，但是注册到其他的可用接收器 '{1}'
+Archive_KimerA009_Description = 类型指定了存档接收器但是注册到其他的可用接收器
+
 TypeConstraint_KimerA010_Title = 无效的参数类型
 TypeConstraint_KimerA010_MessageFormat = 参数类型 '{0}' 不满足 TypeConstraintAttribute 中的约束。类型 '{0}' 需要是 '{1}' 之一或从其中之一派生。
 TypeConstraint_KimerA010_Description = 参数类型不满足 TypeConstraintAttribute 中的约束。

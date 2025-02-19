@@ -18,7 +18,9 @@ namespace KimerA.Analysis
             DiagnosticDefine.Archive_KimerA004,
             DiagnosticDefine.Archive_KimerA005,
             DiagnosticDefine.Archive_KimerA006,
-            DiagnosticDefine.Archive_KimerA007
+            DiagnosticDefine.Archive_KimerA007,
+            DiagnosticDefine.Archive_KimerA008,
+            DiagnosticDefine.Archive_KimerA009
         );
 
         public override void Initialize(AnalysisContext context)
@@ -76,21 +78,57 @@ namespace KimerA.Analysis
                 }
                 else if (hasAttribute.Item2)
                 {
-                    var targetType = context.SemanticModel.GetTypeInfo(archiveTo.TypeArgumentList.Arguments.First()).Type;
-                    if (targetType is null)
+                    // In ArchiveTo class
+
+                    var targetSymbol = context.SemanticModel.GetTypeInfo(archiveTo.TypeArgumentList.Arguments.First()).Type;
+                    if (targetSymbol is null)
                     {
                         return;
                     }
 
-                    var hasArchiveReceiverAttribute = targetType.GetAttributes()
+                    var hasArchiveReceiverAttribute = targetSymbol.GetAttributes()
                         .Any(a => a.AttributeClass?.Name == "ArchiveReceiverAttribute");
                     
                     if (hasArchiveReceiverAttribute is false)
                     {
                         // The type parameter of ArchiveTo<> does not have the ArchiveReceiverAttribute
-                        context.ReportDiagnostic(Diagnostic.Create(DiagnosticDefine.Archive_KimerA001, archiveTo.TypeArgumentList.Arguments.First().GetLocation(), targetType.Name));
+                        context.ReportDiagnostic(Diagnostic.Create(DiagnosticDefine.Archive_KimerA001, archiveTo.TypeArgumentList.Arguments.First().GetLocation(), targetSymbol.Name));
+                    }
+
+                    // check if invoke the <Target>.Instance.TryRegister(...) method in this class
+                    var invocationExpressions = classDeclaration.DescendantNodes().OfType<InvocationExpressionSyntax>();
+
+                    var hasTryRegisterCall = invocationExpressions
+                        .Any(ie => ie.Expression is MemberAccessExpressionSyntax ma &&
+                            ma.Name.Identifier.Text == "TryRegister" &&
+                            ma.Expression is MemberAccessExpressionSyntax ma2 &&
+                            ma2.Name.Identifier.Text == "Instance" &&
+                            ma2.Expression is IdentifierNameSyntax ins &&
+                            ins.Identifier.Text == targetSymbol.Name);
+
+                    if (hasTryRegisterCall is false)
+                    {
+                        // The ArchiveTo class does not invoke the TryRegister method
+                        context.ReportDiagnostic(Diagnostic.Create(DiagnosticDefine.Archive_KimerA008, classDeclaration.GetLocation(), classDeclaration.Identifier.Text, targetSymbol.Name));
+                    }
+
+                    // check if call other receiver's TryRegister method
+                    var otherTryRegisterCall = invocationExpressions
+                        .Where(ie => ie.Expression is MemberAccessExpressionSyntax ma &&
+                            ma.Name.Identifier.Text == "TryRegister" &&
+                            ma.Expression is MemberAccessExpressionSyntax ma2 &&
+                            ma2.Name.Identifier.Text == "Instance" &&
+                            ma2.Expression is IdentifierNameSyntax ins &&
+                            ins.Identifier.Text != targetSymbol.Name);
+                    
+                    foreach (var call in otherTryRegisterCall)
+                    {
+                        // The ArchiveTo class invokes other receiver's TryRegister method
+                        context.ReportDiagnostic(Diagnostic.Create(DiagnosticDefine.Archive_KimerA009, call.GetLocation(), classDeclaration.Identifier.Text, call.Expression.ToString()));
                     }
                 }
+
+                // 
             }
         }
 

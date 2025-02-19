@@ -38,12 +38,12 @@ namespace KimerA
 
         /// <summary>
         /// Get the full path by the specified path type and path.
+        /// <para>if the path type is invalid, return null.</para>
         /// </summary>
         /// <param name="pathType"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        public static string GetPath(PathType pathType, string path)
+        public static string? GetPath(PathType pathType, string? path)
         {
             var basePath = pathType switch
             {
@@ -51,9 +51,10 @@ namespace KimerA
                 PathType.Runtime => Application.streamingAssetsPath,
                 PathType.AppData => Application.persistentDataPath,
                 PathType.Absolute => string.Empty,
-                _ => throw new ArgumentException("Invalid path type.")
+                _ => null,
             };
-
+            if (basePath is null) return null;
+            path ??= string.Empty;
             return pathType == PathType.Absolute ? path : Path.Combine(basePath, path);
         }
 
@@ -63,14 +64,14 @@ namespace KimerA
         /// <param name="path"></param>
         /// <param name="pathType"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateDirectory(string path, PathType pathType = PathType.AppData)
+        public static void CreateDirectory(string? path, PathType pathType = PathType.AppData)
         {
-            path = GetPath(pathType, path);
-            if (Directory.Exists(path))
+            var fullPath = GetPath(pathType, path);
+            if (fullPath is null || Directory.Exists(fullPath))
             {
                 return;
             }
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory(fullPath);
         }
 
         /// <summary>
@@ -78,15 +79,15 @@ namespace KimerA
         /// </summary>
         /// <param name="path"></param>
         /// <param name="pathType"></param>
-        public static void ClearDirectory(string path, PathType pathType = PathType.AppData)
+        public static void ClearDirectory(string? path, PathType pathType = PathType.AppData)
         {
-            path = GetPath(pathType, path);
-            if (Directory.Exists(path) == false)
+            var fullPath = GetPath(pathType, path);
+            if (fullPath is null || Directory.Exists(fullPath) is false)
             {
                 return;
             }
-            Directory.Delete(path, true);
-            Directory.CreateDirectory(path);
+            Directory.Delete(fullPath, true);
+            Directory.CreateDirectory(fullPath);
         }
 
         /// <summary>
@@ -95,9 +96,11 @@ namespace KimerA
         /// <param name="path"></param>
         /// <param name="text"></param>
         /// <param name="pathType"></param>
-        public static void WriteText(string path, string text, PathType pathType = PathType.AppData)
+        /// <returns></returns>
+        public static void WriteText(string? path, string text, PathType pathType = PathType.AppData)
         {
             var fullPath = GetPath(pathType, path);
+            if (fullPath is null) return;
             CreateDirectory(Path.GetDirectoryName(fullPath));
             File.WriteAllText(fullPath, text);
         }
@@ -108,9 +111,13 @@ namespace KimerA
         /// <param name="path"></param>
         /// <param name="pathType"></param>
         /// <returns></returns>
-        public static string ReadText(string path, PathType pathType = PathType.AppData)
+        public static string? ReadText(string? path, PathType pathType = PathType.AppData)
         {
             var fullPath = GetPath(pathType, path);
+            if (fullPath is null || File.Exists(fullPath) == false)
+            {
+                return null;
+            }
             return File.ReadAllText(fullPath);
         }
 
@@ -120,9 +127,10 @@ namespace KimerA
         /// <param name="path"></param>
         /// <param name="bytes"></param>
         /// <param name="pathType"></param>
-        public static void WriteBytes(string path, byte[] bytes, PathType pathType = PathType.AppData)
+        public static void WriteBytes(string? path, byte[] bytes, PathType pathType = PathType.AppData)
         {
             var fullPath = GetPath(pathType, path);
+            if (fullPath is null) return;
             CreateDirectory(Path.GetDirectoryName(fullPath));
             File.WriteAllBytes(fullPath, bytes);
         }
@@ -133,9 +141,13 @@ namespace KimerA
         /// <param name="path"></param>
         /// <param name="pathType"></param>
         /// <returns></returns>
-        public static byte[] ReadBytes(string path, PathType pathType = PathType.AppData)
+        public static byte[] ReadBytes(string? path, PathType pathType = PathType.AppData)
         {
             var fullPath = GetPath(pathType, path);
+            if (fullPath is null || File.Exists(fullPath) == false)
+            {
+                return Array.Empty<byte>();
+            }
             return File.ReadAllBytes(fullPath);
         }
     }

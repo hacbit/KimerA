@@ -1,7 +1,9 @@
 {
     "name": "KimerA.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:fb94ca66e40477d4aa9ec994fb095980"
+    ],
     "includePlatforms": [
         "Editor"
     ],

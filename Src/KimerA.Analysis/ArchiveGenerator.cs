@@ -33,8 +33,13 @@ namespace KimerA.Analysis
                 var (archives, receivers) = source;
                 foreach (var @class in archives)
                 {
-                    var members = @class.Members.Select(m => m is FieldDeclarationSyntax or PropertyDeclarationSyntax).ToImmutableHashSet();
-                    ImplementArchiveTo(spc, @class, @class.Members.ToImmutableHashSet());
+                    // get have [Archivable] fields or properties
+                    var members = @class.Members
+                        .Where(
+                            m => m is FieldDeclarationSyntax or PropertyDeclarationSyntax &&
+                            m.AttributeLists.SelectMany(al => al.Attributes).Any(a => a.Name.ToString() == "Archivable")
+                        ).ToImmutableHashSet();
+                    ImplementArchiveTo(spc, @class, members);
                 }
 
                 var map = GetReceiverToArchiveMap(archives, receivers);
@@ -130,7 +135,7 @@ partial class {receiverName}
         {{
             if (archive.TryGetValue(sender.Key.FullName, out var data))
             {{
-                sender.Value.Load(type => Newtonsoft.Json.JsonConvert.DeserializeObject(data.ToString(), type));
+                sender.Value.Load(data.ToString());
             }}
         }}
     }}
@@ -178,25 +183,24 @@ using System.Collections.Generic;
 {(string.IsNullOrEmpty(ns) ? string.Empty : nsStr)}
 partial class {className} : KimerA.IArchiveSender
 {{
-    [Serializable]
-    class ArchiveHelperData
+    string KimerA.IArchiveSender.Save()
     {{
-        {string.Join("\n        ", membersTypes.Zip(membersIdents, (t, i) => $"public {t} {i};"))}
-    }}
-
-    object KimerA.IArchiveSender.Save()
-    {{
-        var data = new ArchiveHelperData
+        return Newtonsoft.Json.JsonConvert.SerializeObject(new
         {{
-            {string.Join("\n            ", membersIdents.Select(i => $"{i} = {i},"))}
-        }};
-        return data;
+            {string.Join(",\n            ", membersIdents)}
+        }});
     }}
 
-    void KimerA.IArchiveSender.Load(Func<Type, object> converter)
+    void KimerA.IArchiveSender.Load(string value)
     {{
-        if (converter(typeof(ArchiveHelperData)) is not ArchiveHelperData archiveData) return;
-        {string.Join("\n        ", membersIdents.Select(i => $"{i} = archiveData.{i};"))}
+        var data = Newtonsoft.Json.JsonConvert.DeserializeAnonymousType(value, new
+        {{
+            {string.Join(",\n            ", membersIdents.Zip(membersTypes, (i, t) => $"{i} = default({t})"))}
+        }});
+        if (data is not null)
+        {{
+            {string.Join("\n            ", membersIdents.Select(m => $"{m} = data.{m};"))}
+        }}
     }}
 }}
 {(string.IsNullOrEmpty(ns) ? string.Empty : "}")}

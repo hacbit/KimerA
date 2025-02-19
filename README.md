@@ -4,6 +4,12 @@ KimerA 工具集提供了一些实用工具类，和一些 Unity 编辑器拓展
 
 
 
+## Experimental Warning :warning:
+
+***框架处于实验性阶段，请勿用于生产***
+
+
+
 ## Works with
 
 -   Unity Editor 2022.3 (LTS) or later
@@ -59,6 +65,10 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 
 工具集的 Csproj Modifier 工具会在每次代码编译后读取该文件并修改指定的 .csproj 文件以支持你的 IDE。
 
+###  CollectionsMarshal 支持
+
+关于这个也放在了我的另一个项目：https://github.com/hacbit/CollectionsMarshalForUnity
+
 
 
 ### 易拆装的模块
@@ -69,38 +79,61 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 
 然后只需要在某一处调用注册函数即可（如果是 Mono 类，一般考虑 Awake；如果是普通类，直接在构造函数注册即可）。
 
-你可以很轻松的就把原有代码移植过来，并且几乎不会影响你的代码。
+你可以很轻松的就把原有代码移植过来，并且几乎不会影响你的代码。（你也仅需要移除相关的 Attribute 就可以
+
+>   partial 关键字是必须的
 
 ```cs
 using KimerA.Utils;
 using UnityEngine;
 
 [ArchiveTo<MyArchive>]
+public partial class NotMono
+{
+    public static NotMono Instance = new();
+
+    [Archivable]
+    public int ArchiveField = 2333;
+
+    NotMono()
+    {
+        MyArchive.Instance.TryRegister(this);
+    }
+}
+
+[ArchiveTo<MyArchive>]
 public partial class TestArchive : MonoBehaviour
 {
     [Archivable]
-    private int ArchiveField = 0;
+    private int ArchiveField = 114514;
     [Archivable]
-    public string ArchiveProperty { get; private set; } = "Hello";
-    
+    private string ArchiveProperty { get; set; } = "1919810";
+
     private void Awake()
     {
-		MyArchive.Instance.TryRegister(this);
+        MyArchive.Instance.TryRegister(this);
     }
-    
+
     private void Start()
     {
         MyArchive.Instance.Save();
-        ArchiveField = 114514;
-        ArchiveProperty = "1919810";
+
+        NotMono.Instance.ArchiveField = 123456;
+        ArchiveField = 123456;
+        ArchiveProperty = "123456";
+
         MyArchive.Instance.Load();
-        Debug.Assert(ArchiveField is 0, "Load Field Failed");
-        Debug.Assert(ArchiveProperty is "Hello", "Load Property Failed");
-        Debug.Log("Test Passed");
+
+        Debug.Assert(NotMono.Instance.ArchiveField == 2333);
+        Debug.Assert(ArchiveField == 114514);
+        Debug.Assert(ArchiveProperty == "1919810");
+
+        Debug.Log("Test passed!");
     }
 }
 
 [ArchiveReceiver]
 public partial class MyArchive {}
+
 ```
 

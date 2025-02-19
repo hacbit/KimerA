@@ -26,6 +26,14 @@ Archive_KimerA007_Title = The Archivable Property Must Have A Setter
 Archive_KimerA007_MessageFormat = The property '{0}' has ArchivableAttribute must have a setter
 Archive_KimerA007_Description = The property with the ArchivableAttribute must have a setter.
 
+Archive_KimerA008_Title = Type specified archive receiver but not registered
+Archive_KimerA008_MessageFormat = The class '{0}' uses ArchiveToAttribute<> but is not registered to the specified '{1}' class
+Archive_KimerA008_Description = Classes with ArchiveToAttribute<> should be registered to the specified class
+
+Archive_KimerA009_Title = Type specified archive receiver but registered to another receiver
+Archive_KimerA009_MessageFormat = The class '{0}' uses ArchiveToAttribute<> to specify a receiver type, but is registered to another available receiver '{1}'
+Archive_KimerA009_Description = The type specified an archive receiver but is registered to another available receiver
+
 TypeConstraint_KimerA010_Title = Invalid Argument Type
 TypeConstraint_KimerA010_MessageFormat = Parameter type '{0}' does not satisfy the constraint in TypeConstraintAttribute. Type '{0}' needs to be one of '{1}' or derived from one of them.
 TypeConstraint_KimerA010_Description = The parameter type does not satisfy the constraints in the TypeConstraintAttribute.

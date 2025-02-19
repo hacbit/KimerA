@@ -75,7 +75,7 @@ namespace KimerA.Analysis
             title: GetResourceString("Archive_KimerA005_Title"),
             messageFormat: GetResourceString("Archive_KimerA005_MessageFormat"),
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: GetResourceString("Archive_KimerA005_Description")
         );
@@ -104,6 +104,32 @@ namespace KimerA.Analysis
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: GetResourceString("Archive_KimerA007_Description")
+        );
+
+        /// <summary>
+        /// Type specified archive receiver but not registered
+        /// </summary>
+        public static readonly DiagnosticDescriptor Archive_KimerA008 = new DiagnosticDescriptor(
+            id: "KIMERA008",
+            title: GetResourceString("Archive_KimerA008_Title"),
+            messageFormat: GetResourceString("Archive_KimerA008_MessageFormat"),
+            category: "Usage",
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: GetResourceString("Archive_KimerA008_Description")
+        );
+
+        /// <summary>
+        /// Type specified archive receiver but registered to another receiver
+        /// </summary>
+        public static readonly DiagnosticDescriptor Archive_KimerA009 = new DiagnosticDescriptor(
+            id: "KIMERA009",
+            title: GetResourceString("Archive_KimerA009_Title"),
+            messageFormat: GetResourceString("Archive_KimerA009_MessageFormat"),
+            category: "Usage",
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: GetResourceString("Archive_KimerA009_Description")
         );
 
         /// <summary>
