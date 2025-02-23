@@ -1,7 +1,9 @@
 {
     "name": "KimerA.ECS",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:e5875139c72a5184bbe68d93615c7895"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

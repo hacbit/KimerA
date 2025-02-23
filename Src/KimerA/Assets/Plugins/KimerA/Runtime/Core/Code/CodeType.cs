@@ -1,0 +1,32 @@
+namespace KimerA.Code
+{
+    public enum CodeType
+    {
+        Using,
+        Namespace,
+        Class,
+        Struct,
+        Enum,
+        Interface,
+        Method,
+        Property,
+        Field,
+        Event,
+        Constructor,
+        Destructor,
+        Indexer,
+        Operator,
+        ConversionOperator,
+        EnumMember,
+        Delegate,
+        Attribute,
+        Parameter,
+        TypeParameter,
+        TypeConstraint,
+        Statement,
+        Expression,
+        Comment,
+        DocumentationComment,
+        PreprocessorDirective,
+    }
+}

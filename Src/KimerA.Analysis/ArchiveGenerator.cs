@@ -100,6 +100,38 @@ partial class {receiverName}
     private {receiverName}() {{ }}
 
     /// <summary>
+    /// Called before serialization.
+    /// </summary>
+    partial void OnSaveBegin();
+
+    /// <summary>
+    /// Called after writing to the archive file.
+    /// </summary>
+    partial void OnSaveEnd();
+
+    /// <summary>
+    /// Called before reading from the archive file and deserialization.
+    /// </summary>
+    partial void OnLoadBegin();
+
+    /// <summary>
+    /// Called after all registered senders have been loaded.
+    /// </summary>
+    partial void OnLoadEnd();
+
+    /// <summary>
+    /// Called after the data is serialized and before writing to the archive file.
+    /// <para>You can partial implement this method to encrypt the serialized data.</para>
+    /// </summary>
+    partial void OnProcessSerialize(ref string data);
+
+    /// <summary>
+    /// Called after reading from the archive file and before deserialization.
+    /// <para>You can partial implement this method to decrypt the serialized data.</para>
+    /// </summary>
+    partial void OnProcessDeserialize(ref string data);
+
+    /// <summary>
     /// Register the sender to the receiver, return false if the sender has been registered.
     /// Each type of sender can only be registered once.
     /// </summary>
@@ -115,13 +147,16 @@ partial class {receiverName}
     /// </summary>
     public void Save()
     {{
+        OnSaveBegin();
         var archive = new Dictionary<string, object>();
         foreach (var sender in m_Senders)
         {{
             archive.Add(sender.Key.FullName, sender.Value.Save());
         }}
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(archive);
+        OnProcessSerialize(ref json);
         KimerA.FileSystem.WriteText(ArchiveName, json);
+        OnSaveEnd();
     }}
 
     /// <summary>
@@ -129,7 +164,9 @@ partial class {receiverName}
     /// </summary>
     public void Load()
     {{
+        OnLoadBegin();
         var json = KimerA.FileSystem.ReadText(ArchiveName);
+        OnProcessDeserialize(ref json);
         var archive = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
         foreach (var sender in m_Senders)
         {{
@@ -138,6 +175,7 @@ partial class {receiverName}
                 sender.Value.Load(data.ToString());
             }}
         }}
+        OnLoadEnd();
     }}
 }}
 {(string.IsNullOrEmpty(ns) ? string.Empty : "}")}

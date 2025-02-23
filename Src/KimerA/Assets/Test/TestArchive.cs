@@ -1,6 +1,8 @@
 using KimerA.Utils;
 using UnityEngine;
 
+namespace KimerA.Test
+{
 [ArchiveTo<MyArchive>]
 public partial class NotMono
 {
@@ -48,3 +50,4 @@ public partial class TestArchive : MonoBehaviour
 
 [ArchiveReceiver]
 public partial class MyArchive {}
+}

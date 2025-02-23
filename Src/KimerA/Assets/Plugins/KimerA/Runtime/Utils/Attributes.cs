@@ -63,12 +63,28 @@ namespace KimerA.Utils
     }
 #endregion
 
-    /// <summary>
-    /// 允许一个字段或属性未被使用
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public sealed class AllowUnusedAttribute : Attribute
+    [Obsolete]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
+    public sealed class InjectAttribute : Attribute
     {
+        public string FuncName { get; }
 
+        public string InjectMethod { get; }
+
+        public InjectType Type { get; }
+
+        public enum InjectType
+        {
+            Before,
+            After
+        }
+
+        public InjectAttribute(string funcName, string injectStmt, InjectType type = InjectType.Before)
+        {
+            FuncName = funcName;
+            InjectMethod = injectStmt;
+            Type = type;
+        }
     }
+
 }

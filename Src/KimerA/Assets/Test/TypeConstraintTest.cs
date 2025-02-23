@@ -1,6 +1,8 @@
 using KimerA.Utils;
 using UnityEngine;
 
+namespace KimerA.Test
+{
 public class TypeConstraintTest : MonoBehaviour
 {
     public interface ITestInterface {}
@@ -28,4 +30,5 @@ public class TypeConstraintTest : MonoBehaviour
         TestMethod(114514, "Hello", null);
         TestMethod(null, null, null);
     }
+}
 }
