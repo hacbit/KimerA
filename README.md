@@ -71,7 +71,7 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 
 
 
-### 易拆装的模块
+### 易拆装，高可定制化的模块
 
 以工具集内置的存档系统为例：
 
@@ -79,7 +79,9 @@ https://github.com/hacbit/KimerA.git?path=Src/KimerA/Assets/Plugins/KimerA
 
 然后只需要在某一处调用注册函数即可（如果是 Mono 类，一般考虑 Awake；如果是普通类，直接在构造函数注册即可）。
 
-你可以很轻松的就把原有代码移植过来，并且几乎不会影响你的代码。（你也仅需要移除相关的 Attribute 就可以
+你可以很轻松的就把原有代码移植过来，并且几乎不会影响你的代码。（你也仅需要移除相关的 Attribute 就可以。
+
+经过上述步骤，被 `[ArchiveReceiver]` 标记的类在事实上就成为了一个 archive system，然后你可以随意在你的类中添加其他代码来拓展原有的系统
 
 >   partial 关键字是必须的
 

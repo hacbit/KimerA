@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Unity.CodeEditor;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 namespace KimerA.Editor.CsprojModifier
@@ -128,8 +129,12 @@ namespace KimerA.Editor.CsprojModifier
         [InitializeOnLoadMethod]
         public static void Init()
         {
-            LoadConfigs();
-            ChangeCsprojs();
+            CompilationPipeline.compilationFinished += _ =>
+            {
+                LoadConfigs();
+                ChangeCsprojs();
+                Debug.Log("CsprojModifier: Csproj files have been modified.");
+            };
         }
 
         private static void ChangeCsprojs()

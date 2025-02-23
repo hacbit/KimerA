@@ -6,18 +6,20 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-struct Test
+namespace KimerA.Test
 {
-    public int A;
-
-    public static implicit operator Test(int value)
-    {
-        return new Test { A = value };
-    }
-}
-
 partial class CollectionsMarshalTest : MonoBehaviour
 {
+    public struct Test
+    {
+        public int A;
+
+        public static implicit operator Test(int value)
+        {
+            return new Test { A = value };
+        }
+    }
+
     public List<Test> list = new(10000);
     public List<Test> list2 = new(10000);
 
@@ -152,4 +154,5 @@ partial class CollectionsMarshalTest : MonoBehaviour
             dict2[key] = item;
         }
     }
+}
 }

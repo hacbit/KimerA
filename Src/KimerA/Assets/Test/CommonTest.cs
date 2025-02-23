@@ -3,6 +3,9 @@ using UnityEngine;
 
 [module: SkipLocalsInit]
 
+namespace KimerA.Test
+{
+
 record Person(string FirstName, string LastName);
 
 struct Point
@@ -31,4 +34,5 @@ sealed class CommonTest : MonoBehaviour
             Debug.Log($"Third: {third}, Rest: {string.Join(", ", rest)}");
         }
     }
+}
 }
