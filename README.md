@@ -139,3 +139,63 @@ public partial class MyArchive {}
 
 ```
 
+
+
+### 灵活的框架
+
+一个树状结构的框架，你可以很容易做到的：
+
+-   在保证安全的情况下更改部分结构
+-   灵活的拦截函数并插入额外指令
+-   与框架外交互友好（todo）
+
+
+
+#### 拦截器
+
+以下是一个创建拦截器的示例，该拦截器会用在**predicate 返回 true**的所有子节点上的对象的对应方法，你需要指定 transform 参数来指定拦截的方法要如何修改
+
+```cs
+public class TestNode : INode
+{
+    public int Value;
+
+    public TestNode(int val)
+    {
+        Value = val;
+    }
+
+    public void OnStartup(ref NodeActionState state)
+    {
+        state.ApplyInterceptor(
+            predicate: node => node is TestNode tn && tn.Value == 100,
+            transform: action =>
+            {
+                action += (ref NodeActionState _) => Debug.Log("TestNode Value is 100");
+                return action;
+            }
+        );
+	}
+}
+```
+
+当然，这只能对当前节点的子节点生效，不能影响到其他部分的节点，但是你可以通过 InsertBy 插入一个节点，然后如法炮制（），这是一个简单的示范，展示如何把一个 NodeExample_1 的对象插入到 NodeExample_2 节点与其父节点之间：
+
+```cs
+public sealed class KimerA_Test : MonoBehaviour
+{
+    public KimerA_Init initer;
+    
+    // other codes
+    
+    public void InsertTest()
+    {
+        initer.InsertBy(
+        	new NodeExample_1(),
+            predicate: static p => p is ImmutableNodeProvider<NodeExample_2>,
+            transform: static p => p as ImmutableNodeProvider<NodeExample_2>
+        ).Load()
+    }
+}
+```
+
