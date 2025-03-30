@@ -2,8 +2,6 @@
     "name": "KimerA",
     "rootNamespace": "",
     "references": [
-        "GUID:4b8ac830ae851be4fab3112d77228283",
-        "GUID:e5875139c72a5184bbe68d93615c7895",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:593a5b492d29ac6448b1ebf7f035ef33",
         "GUID:5c01796d064528144a599661eaab93a6",
