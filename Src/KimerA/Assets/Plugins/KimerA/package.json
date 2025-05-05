@@ -8,7 +8,5 @@
     "keywords": [ "framework", "KimerA" ],
     "license": "MIT",
     "category": "Framework",
-    "dependencies": {
-        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask/tree/2.5.10/src/UniTask/Assets/Plugins/UniTask"
-    }
+    "dependencies": {}
 }
