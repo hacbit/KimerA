@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA.Utils
 {
     public static class SettingStorageUtil
@@ -5,3 +7,5 @@ namespace KimerA.Utils
         private static SettingConfig? settingConfigInternal;
     }
 }
+
+#endif
