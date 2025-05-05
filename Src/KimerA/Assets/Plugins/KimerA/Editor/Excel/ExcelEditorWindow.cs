@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ODIN_INSPECTOR
 
 namespace KimerA.Data.Excel.Editor
 {

@@ -1,9 +1,8 @@
 #if UNITY_EDITOR
 
-using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 
-public sealed class CommandEditorWindow : OdinEditorWindow
+public sealed class CommandEditorWindow : EditorWindow
 {
     [MenuItem("KimerA/Command Editor")]
     private static void ShowWindow()
