@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA.Data.Excel.Config
 {
     using System;
@@ -18,7 +20,7 @@ namespace KimerA.Data.Excel.Config
         [ValidateInput("CheckValid", Error)]
         [LabelText("Field type")]
         public string Type;
-        
+
         [ValidateInput("CheckValidBool", Error)]
         [LabelText("Is List")]
         public bool IsList;
@@ -28,7 +30,6 @@ namespace KimerA.Data.Excel.Config
             TypeUtil.DefaultTypes.Contains(Type) == false
             || TypeUtil.ResTypes.Contains(Type) == false;
 
-        #if UNITY_EDITOR
         private readonly bool CheckValid(string type, ref string err)
         {
             if (IsStruct == false || IsList == false)
@@ -48,6 +49,7 @@ namespace KimerA.Data.Excel.Config
             err = Error;
             return false;
         }
-        #endif
     }
 }
+
+#endif

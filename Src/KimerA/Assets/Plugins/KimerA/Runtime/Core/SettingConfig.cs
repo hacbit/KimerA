@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA
 {
     using System.Collections.Generic;
@@ -19,3 +21,5 @@ namespace KimerA
         }
     }
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA.Data.Res
 {
     using System;
@@ -26,3 +28,5 @@ namespace KimerA.Data.Res
         }
     }
 }
+
+#endif

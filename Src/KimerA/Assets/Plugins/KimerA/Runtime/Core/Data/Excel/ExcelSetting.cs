@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA.Data.Excel
 {
     using System;
@@ -30,7 +32,6 @@ namespace KimerA.Data.Excel
 
         public List<ExcelStructConfig> StructConfigs = new();
 
-        #if UNITY_EDITOR
         [Button("Reset Setting", ButtonSizes.Medium)]
         private void Reset()
         {
@@ -43,6 +44,7 @@ namespace KimerA.Data.Excel
                 StructConfigs.Clear();
             }
         }
-        #endif
     }
 }
+
+#endif

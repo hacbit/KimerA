@@ -1,3 +1,5 @@
+#if ODIN_INSPECTOR
+
 namespace KimerA.Data.Excel.Config
 {
     using System;
@@ -24,3 +26,5 @@ namespace KimerA.Data.Excel.Config
         }
     }
 }
+
+#endif
