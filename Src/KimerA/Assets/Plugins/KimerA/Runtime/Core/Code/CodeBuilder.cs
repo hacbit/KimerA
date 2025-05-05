@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Sirenix.Utilities;
 
 namespace KimerA.Code
 {
@@ -249,7 +248,7 @@ namespace KimerA.Code
         private string BuildMember(Member member)
         {
             var code = $"{BuildAccessModifier(member.AccessModifier)} {member.TypeOrReturnType} {member.Name}";
-            if (member.Value.IsNullOrWhitespace())
+            if (string.IsNullOrWhiteSpace(member.Value))
             {
                 return code + ';';
             }
@@ -282,7 +281,7 @@ namespace KimerA.Code
             var indentSingleton = "    ";
             var indent = string.Empty;
 
-            if (m_Namespace.IsNullOrWhitespace() == false)
+            if (string.IsNullOrWhiteSpace(m_Namespace) is false)
             {
                 code += $"namespace {m_Namespace}" + Environment.NewLine + "{" + Environment.NewLine;
                 indent += indentSingleton;
