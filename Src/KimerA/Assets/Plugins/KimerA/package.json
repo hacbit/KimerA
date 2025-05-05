@@ -9,6 +9,6 @@
     "license": "MIT",
     "category": "Framework",
     "dependencies": {
-        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git#2.5.10?path=src/UniTask/Assets/Plugins/UniTask"
+        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10"
     }
 }
