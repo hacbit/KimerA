@@ -1,5 +1,5 @@
 {
-    "name": "com.framework.kimera",
+    "name": "com.kimera.framework",
     "displayName": "KimerA",
     "author": { "name": "KimerA, Inc." },
     "version": "0.0.1",
@@ -8,5 +8,7 @@
     "keywords": [ "framework", "KimerA" ],
     "license": "MIT",
     "category": "Framework",
-    "dependencies": {}
+    "dependencies": {
+        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask/tree/2.5.10/src/UniTask/Assets/Plugins/UniTask"
+    }
 }
