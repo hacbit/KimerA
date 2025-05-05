@@ -5,7 +5,9 @@ namespace KimerA.Data.Excel.Config
     using System;
     using System.Linq;
     using KimerA.Utils;
+    #if KIMERA_NEWTONSOFTJSON_SUPPORT
     using Newtonsoft.Json;
+    #endif
     using Sirenix.OdinInspector;
 
     [Serializable]
@@ -25,7 +27,9 @@ namespace KimerA.Data.Excel.Config
         [LabelText("Is List")]
         public bool IsList;
 
+#if KIMERA_NEWTONSOFTJSON_SUPPORT
         [JsonIgnore]
+#endif
         public readonly bool IsStruct =>
             TypeUtil.DefaultTypes.Contains(Type) == false
             || TypeUtil.ResTypes.Contains(Type) == false;
