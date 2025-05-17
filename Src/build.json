@@ -1,6 +1,12 @@
 {
     "analyzers": [
-        "KimerA.Analysis",
-        "KimerA.Analysis.ECS"
+        {
+            "name": "KimerA.Analysis",
+            "modify": 1747508021.6870036
+        },
+        {
+            "name": "KimerA.Analysis.ECS",
+            "modify": 1739697754.0211885
+        }
     ]
 }
