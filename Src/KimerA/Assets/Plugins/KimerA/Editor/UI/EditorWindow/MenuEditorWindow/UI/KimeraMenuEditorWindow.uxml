@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <KimerA.Editor.UI.TwoPaneSplitView_Helper>
+        <ui:VisualElement>
+            <ui:TreeView name="MenuArea" />
+        </ui:VisualElement>
+        <ui:VisualElement>
+            <ui:ScrollView name="ContentArea">
+                <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </KimerA.Editor.UI.TwoPaneSplitView_Helper>
+</ui:UXML>
