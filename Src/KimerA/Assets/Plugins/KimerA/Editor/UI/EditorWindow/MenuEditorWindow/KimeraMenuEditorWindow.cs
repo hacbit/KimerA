@@ -17,7 +17,7 @@ namespace KimerA.Editor.UI
 
         protected ScrollView ContentArea;
 
-        public KimeraMenuItemTree MenuTree { get; private set; }
+        public TreeViewItemDataBuilder<KimeraMenuItemData> MenuTree { get; private set; }
 
         private void OnEnable()
         {
@@ -35,12 +35,12 @@ namespace KimerA.Editor.UI
             InitMenu_Internal();
         }
 
-        protected abstract KimeraMenuItemTree OnMenuInit();
+        protected abstract TreeViewItemDataBuilder<KimeraMenuItemData> OnMenuInit();
 
         private void InitMenu_Internal()
         {
             MenuTree = OnMenuInit();
-            MenuArea.SetRootItems(MenuTree.Items);
+            MenuArea.SetRootItems(MenuTree.AsTreeViewItemData().children.ToList());
             MenuArea.makeItem = static () => new Label();
             MenuArea.bindItem = (e, i) =>
             {
@@ -61,9 +61,9 @@ namespace KimerA.Editor.UI
             MenuArea.selectionType = SelectionType.Single;
             MenuArea.Rebuild();
 
-            if (MenuTree.Items.Count > 0)
+            if (MenuTree.HasChildren)
             {
-                var id = MenuTree.Items[0].id;
+                var id = MenuTree.Children.First().Id;
                 MenuArea.SetSelectionById(id);
             }
         }
@@ -76,7 +76,7 @@ namespace KimerA.Editor.UI
 
         public void RefreshMenu()
         {
-            MenuArea.SetRootItems(MenuTree.Items);
+            MenuArea.SetRootItems(MenuTree.AsTreeViewItemData().children.ToList());
             MenuArea.Rebuild();
         }
 

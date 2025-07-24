@@ -6,6 +6,8 @@ public interface IKimeraUI
 {
     VisualElement RootElement { get; }
 
+    void OnCreate();
+
     void OnEnable() { }
 
     void OnUpdate() { }

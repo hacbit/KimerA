@@ -2,7 +2,9 @@
     "name": "KimerA.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:fb94ca66e40477d4aa9ec994fb095980"
+        "GUID:fb94ca66e40477d4aa9ec994fb095980",
+        "GUID:d528c8c98d269ca44a06cd9624a03945",
+        "GUID:b93f844d45cfcc44fa2b0eed5c9ec6bb"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,6 +15,17 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.ide.visualstudio",
+            "expression": "",
+            "define": "VISUAL_STUDIO_SUPPORT"
+        },
+        {
+            "name": "com.unity.ide.rider",
+            "expression": "",
+            "define": "RIDER_SUPPORT"
+        }
+    ],
     "noEngineReferences": false
 }
