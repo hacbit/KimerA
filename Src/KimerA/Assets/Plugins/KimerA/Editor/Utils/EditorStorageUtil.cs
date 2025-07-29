@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
 
 using System;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace KimerA.Editor.Utils;
@@ -11,8 +13,18 @@ public static class EditorStorageUtil
 
     private static EditorStorageSO GetOrCreateStorage(string storageKey = k_StorageDefaultKey)
     {
-        var storage = ResUtil.ResolveConfigResAsset<EditorStorageSO>($"{storageKey}.asset")
-            ?? ScriptableObject.CreateInstance<EditorStorageSO>();
+        var storage = ResUtil.ResolveConfigResAsset<EditorStorageSO>($"{storageKey}.asset");
+        if (storage is null)
+        {
+            storage = ScriptableObject.CreateInstance<EditorStorageSO>();
+            if (Directory.Exists(PathUtil.ConfigResPath) is false)
+            {
+                Directory.CreateDirectory(PathUtil.ConfigResPath);
+            }
+            AssetDatabase.CreateAsset(storage, PathUtil.Combine(PathUtil.ConfigResPath, $"{storageKey}.asset"));
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
         return storage;
     }
 
