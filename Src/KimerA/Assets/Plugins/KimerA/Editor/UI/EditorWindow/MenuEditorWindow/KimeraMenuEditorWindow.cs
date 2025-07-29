@@ -21,7 +21,7 @@ namespace KimerA.Editor.UI
 
         private void OnEnable()
         {
-            m_VisualTreeAsset = PathUtil.ResolveEditorAsset<VisualTreeAsset>(VISUAL_TREE_ASSET_PATH);
+            m_VisualTreeAsset = ResUtil.ResolveEditorAsset<VisualTreeAsset>(VISUAL_TREE_ASSET_PATH);
 
             VisualElement root = rootVisualElement;
 

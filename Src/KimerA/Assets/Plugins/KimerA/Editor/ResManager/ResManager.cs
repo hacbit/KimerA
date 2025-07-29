@@ -14,7 +14,7 @@ public sealed class ResManager : IKimeraUI
 
     public void OnCreate()
     {
-        var visualTreeAsset = PathUtil.ResolveEditorAsset<VisualTreeAsset>("ResManager/UI/ResManager.uxml");
+        var visualTreeAsset = ResUtil.ResolveEditorAsset<VisualTreeAsset>("ResManager/UI/ResManager.uxml");
         visualTreeAsset.CloneTree(RootElement);
     }
 }

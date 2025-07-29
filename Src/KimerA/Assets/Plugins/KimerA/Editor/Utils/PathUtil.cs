@@ -1,8 +1,7 @@
 #if UNITY_EDITOR
 
-using System.Collections.Generic;
+using System;
 using System.IO;
-using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,49 +45,30 @@ internal static class PathUtil
         }
     }
 
+    /// <summary>
+    /// 配置资源路径
+    /// </summary>
+    public const string ConfigResPath = "Assets/ConfigRes";
+
     private static void InitRootPath()
     {
-        if (TryFindPackageJson(out var packageJsonPath))
+        if (File.Exists($"{Application.dataPath}/Plugins/KimerA/package.json"))
         {
-            _libraryRootPath = Path.GetDirectoryName(packageJsonPath).Replace("\\", "/");
-
+            _libraryRootPath = "Assets/Plugins/KimerA";
             return;
         }
 
-        Debug.LogWarning("Failed to locate package.json. Using Assets as fallback.");
-        _libraryRootPath = "Assets";
-    }
-
-    private static bool TryFindPackageJson(out string packageJsonPath)
-    {
-        var guids = AssetDatabase.FindAssets("package");
-        foreach (var guid in guids)
+        var packagePath = $"Packages/{PACKAGE_IDENTIFY}/package.json";
+        var json = AssetDatabase.LoadAssetAtPath<TextAsset>(packagePath);
+        if (json is not null)
         {
-            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            if (assetPath.EndsWith("/package.json") is false)
-            {
-                continue;
-            }
-            var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(assetPath);
-            if (asset is null)
-            {
-                continue;
-            }
-            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(asset.text);
-            if (json.TryGetValue("name", out var name) && name.ToString() == PACKAGE_IDENTIFY)
-            {
-                packageJsonPath = assetPath;
-                return true;
-            }
+            _libraryRootPath = $"Packages/{PACKAGE_IDENTIFY}";
+            return;
         }
 
-        packageJsonPath = null;
-        return false;
+        Debug.Assert(string.IsNullOrEmpty(_libraryRootPath) is false, "KimerA 根目录加载失败");
     }
 
-    /// <summary>
-    /// 组合路径（跨平台兼容）
-    /// </summary>
     public static string Combine(params string[] paths)
     {
         if (paths == null || paths.Length == 0)
@@ -102,17 +82,21 @@ internal static class PathUtil
         return result;
     }
 
-    /// <summary>
-    /// 使用相对于 Editor 的路径
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="relativePath"></param>
-    /// <returns></returns>
-    public static T ResolveEditorAsset<T>(string relativePath) where T : Object
+    public static string RelativeOf(string path, string basePath)
     {
-        var path = Combine(EditorPath, relativePath);
-        var asset = AssetDatabase.LoadAssetAtPath<T>(path);
-        return asset;
+        if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(basePath))
+            return path;
+
+        if (Path.IsPathRooted(path))
+        {
+            path = path.Replace("\\", "/");
+            basePath = basePath.Replace("\\", "/");
+            if (path.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))
+            {
+                return path[basePath.Length..].TrimStart('/');
+            }
+        }
+        return path;
     }
 }
 
