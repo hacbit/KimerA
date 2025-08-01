@@ -8,5 +8,7 @@
     "keywords": [ "framework", "KimerA" ],
     "license": "MIT",
     "category": "Framework",
-    "dependencies": {}
+    "dependencies": {
+        "com.unity.nuget.newtonsoft-json": ">=3"
+    }
 }
