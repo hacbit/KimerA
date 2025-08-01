@@ -8,6 +8,8 @@ namespace KimerA.Editor;
 [MainManagerItem("Main", Priority = 0)]
 public sealed class MainManager : IKimeraUI
 {
+    public string Name => "Main";
+
     public VisualElement RootElement { get; private set; } = new VisualElement();
 
     public void OnCreate()

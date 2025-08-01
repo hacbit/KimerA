@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using KimerA.Editor.UI;
 using KimerA.Editor.Utils;
+using UnityEngine.UIElements;
 
 namespace KimerA.Editor;
 
@@ -37,9 +38,9 @@ public sealed class MainManagerEditorWindow : KimeraMenuEditorWindow
         window.Show();
     }
 
-    protected override TreeViewItemDataBuilder<KimeraMenuItemData> OnMenuInit()
+    protected override TreeViewItemData<KimeraMenuItemData> OnMenuInit()
     {
-        var tree = new TreeViewItemDataBuilder<KimeraMenuItemData>();
+        var tree = new TreeViewItemData<KimeraMenuItemData>("Main Manager Root".GetHashCode(), new KimeraMenuItemData("Root", null));
         CollectMainManagerItems(tree);
         return tree;
     }
@@ -52,10 +53,9 @@ public sealed class MainManagerEditorWindow : KimeraMenuEditorWindow
         }
     }
 
-    private static void CollectMainManagerItems(TreeViewItemDataBuilder<KimeraMenuItemData> tree)
+    private static void CollectMainManagerItems(TreeViewItemData<KimeraMenuItemData> tree)
     {
         var types = TypeUtil.QueryTypesWithAttribute<MainManagerItemAttribute>();
-        var root = new TreeViewItemDataBuilder<KimeraMenuItemData>();
         // id -> priority
         var priorityMap = new Dictionary<int, int>();
         foreach (var type in types)
@@ -72,12 +72,9 @@ public sealed class MainManagerEditorWindow : KimeraMenuEditorWindow
             var priority = attr.Priority;
             var id = itemPath.GetHashCode();
             priorityMap[id] = priority;
-            var data = new KimeraMenuItemData(itemPath, obj);
-            var helper = new ItemInsertHelper(id, data, priority);
-            AddItemAtPath(root, helper, priorityMap);
+            var helper = new ItemInsertHelper(id, new KimeraMenuItemData(itemPath, obj), priority);
+            AddItemAtPath(tree, helper, priorityMap);
         }
-
-        tree.AddChildren(root.Children.ToList());
     }
 
     private readonly struct ItemInsertHelper
@@ -94,37 +91,37 @@ public sealed class MainManagerEditorWindow : KimeraMenuEditorWindow
         }
     }
 
-    private static void AddItemAtPath(TreeViewItemDataBuilder<KimeraMenuItemData> node, ItemInsertHelper helper, Dictionary<int, int> priorityMap)
+    private static void AddItemAtPath(TreeViewItemData<KimeraMenuItemData> node, ItemInsertHelper helper, Dictionary<int, int> priorityMap)
     {
         var parent = node;
         var walker = new PathWalker(helper.Data.Name);
         while (walker.MoveNext())
         {
             var current = walker.Current;
-            foreach (var child in node.Children)
+            foreach (var child in node.children)
             {
-                if (child.Data.Name == current)
+                if (child.data.Name == current)
                 {
                     parent = node;
                     node = child;
                     goto FindItem;
                 }
             }
-            EnsurePathAdded(ref node, new KimeraMenuItemData(current.ToString(), null));
+            EnsurePathAdded(ref node, new KimeraMenuItemData(current.ToString(), helper.Data.Value));
 
         FindItem:
             ;
         }
 
-        var newNode = node.SetData(helper.Data);
+        var newNode = node.ReplaceData(helper.Data);
         parent.ReplaceChild(newNode);
 
-        void EnsurePathAdded(ref TreeViewItemDataBuilder<KimeraMenuItemData> parent, KimeraMenuItemData child)
+        void EnsurePathAdded(ref TreeViewItemData<KimeraMenuItemData> parent, KimeraMenuItemData child)
         {
-            var newChild = new TreeViewItemDataBuilder<KimeraMenuItemData>(child.Name.GetHashCode(), child);
+            var newChild = new TreeViewItemData<KimeraMenuItemData>(child.Name.GetHashCode(), child);
             parent.InsertChildBy(newChild, child =>
             {
-                var childPriority = priorityMap.TryGetValue(child.Id, out var priority) ? priority : int.MaxValue;
+                var childPriority = priorityMap.TryGetValue(child.id, out var priority) ? priority : int.MaxValue;
                 return priorityMap[helper.Id] < childPriority;
             });
             parent = newChild;

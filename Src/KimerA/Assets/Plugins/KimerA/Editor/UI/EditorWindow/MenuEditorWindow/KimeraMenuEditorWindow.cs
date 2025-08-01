@@ -3,10 +3,23 @@
 using System.Linq;
 using KimerA.Editor.Utils;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace KimerA.Editor.UI
 {
+    public readonly struct KimeraMenuItemData
+    {
+        public string Name { get; }
+        public IKimeraUI Value { get; }
+
+        public KimeraMenuItemData(string name, IKimeraUI value)
+        {
+            Name = name;
+            Value = value;
+        }
+    }
+
     public abstract class KimeraMenuEditorWindow : EditorWindow
     {
         private VisualTreeAsset m_VisualTreeAsset = default;
@@ -17,7 +30,9 @@ namespace KimerA.Editor.UI
 
         protected ScrollView ContentArea;
 
-        public TreeViewItemDataBuilder<KimeraMenuItemData> MenuTree { get; private set; }
+        protected Toolbar ToolbarArea;
+
+        public TreeViewItemData<KimeraMenuItemData> MenuTree { get; private set; }
 
         private void OnEnable()
         {
@@ -25,22 +40,22 @@ namespace KimerA.Editor.UI
 
             VisualElement root = rootVisualElement;
 
-            var splitView = m_VisualTreeAsset.CloneTree();
-            splitView.StretchToParentSize();
-            root.Add(splitView);
+            m_VisualTreeAsset.CloneTree(root);
+            root.StretchToParentSize();
 
-            MenuArea = splitView.Q<TreeView>("MenuArea");
-            ContentArea = splitView.Q<ScrollView>("ContentArea");
+            MenuArea = root.Q<TreeView>("MenuArea");
+            ContentArea = root.Q<ScrollView>("ContentArea");
+            ToolbarArea = root.Q<Toolbar>("ToolbarArea");
 
             InitMenu_Internal();
         }
 
-        protected abstract TreeViewItemDataBuilder<KimeraMenuItemData> OnMenuInit();
+        protected abstract TreeViewItemData<KimeraMenuItemData> OnMenuInit();
 
         private void InitMenu_Internal()
         {
             MenuTree = OnMenuInit();
-            MenuArea.SetRootItems(MenuTree.AsTreeViewItemData().children.ToList());
+            MenuArea.SetRootItems(MenuTree.GetChildren());
             MenuArea.makeItem = static () => new Label();
             MenuArea.bindItem = (e, i) =>
             {
@@ -50,40 +65,25 @@ namespace KimerA.Editor.UI
             };
             MenuArea.selectionChanged += (selections) =>
             {
-                var data = GetSelectionItemData();
-                ContentArea.Clear();
-                data.Value?.OnEnable();
-                if (data.Value?.RootElement is not null)
+                var data = selections.FirstOrDefault();
+                if (data is KimeraMenuItemData selection)
                 {
-                    ContentArea.Add(data.Value.RootElement);
+                    ContentArea.Clear();
+                    selection.Value?.OnEnable();
+                    if (selection.Value?.RootElement is not null)
+                    {
+                        ContentArea.Add(selection.Value?.RootElement);
+                    }
                 }
             };
             MenuArea.selectionType = SelectionType.Single;
             MenuArea.Rebuild();
-
-            if (MenuTree.HasChildren)
-            {
-                var id = MenuTree.Children.First().Id;
-                MenuArea.SetSelectionById(id);
-            }
-        }
-
-        public KimeraMenuItemData GetSelectionItemData()
-        {
-            var item = MenuArea.GetSelectedItems<KimeraMenuItemData>().FirstOrDefault();
-            return item.data;
         }
 
         public void RefreshMenu()
         {
-            MenuArea.SetRootItems(MenuTree.AsTreeViewItemData().children.ToList());
+            MenuArea.SetRootItems(MenuTree.GetChildren());
             MenuArea.Rebuild();
-        }
-
-        protected virtual void OnGUI()
-        {
-            var item = GetSelectionItemData();
-            item.Value?.OnUpdate();
         }
     }
 }

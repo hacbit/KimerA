@@ -9,6 +9,4 @@ public interface IKimeraUI
     void OnCreate();
 
     void OnEnable() { }
-
-    void OnUpdate() { }
 }
