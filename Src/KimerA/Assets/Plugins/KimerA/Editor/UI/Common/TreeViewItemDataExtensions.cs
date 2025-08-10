@@ -8,7 +8,7 @@ namespace KimerA.Editor.UI;
 
 public static class TreeViewItemDataExtensions
 {
-    public static List<TreeViewItemData<T>> GetChildren<T>(this TreeViewItemData<T> item)
+    public static IList<TreeViewItemData<T>> GetChildren<T>(this TreeViewItemData<T> item)
     {
         return item.children as List<TreeViewItemData<T>>;
     }
@@ -93,6 +93,20 @@ public static class TreeViewItemDataExtensions
         return -1;
     }
 
+    public static bool TryGetChild<T>(this TreeViewItemData<T> item, int itemId, out TreeViewItemData<T> child)
+    {
+        foreach (var _child in item.children)
+        {
+            if (_child.id == itemId)
+            {
+                child = _child;
+                return true;
+            }
+        }
+        child = new TreeViewItemData<T>();
+        return false;
+    }
+
     public static void ReplaceChild<T>(this TreeViewItemData<T> item, TreeViewItemData<T> newChild)
     {
         if (item.children is IList<TreeViewItemData<T>> m_Children)
@@ -112,9 +126,66 @@ public static class TreeViewItemDataExtensions
         }
     }
 
+    public static TreeViewItemData<T> ReplaceId<T>(this TreeViewItemData<T> item, int newId)
+    {
+        return new TreeViewItemData<T>(newId, item.data, item.children as List<TreeViewItemData<T>>);
+    }
+
     public static TreeViewItemData<T> ReplaceData<T>(this TreeViewItemData<T> item, T newData)
     {
-        return new TreeViewItemData<T>(item.id, newData, item.GetChildren());
+        return new TreeViewItemData<T>(item.id, newData, item.children as List<TreeViewItemData<T>>);
+    }
+
+    public static void AddToTreeAtPath<T>(this TreeViewItemData<T> self, TreeViewItemData<T> root, string path)
+    {
+        var current = root;
+        var parts = path?.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (parts is not null)
+        {
+            foreach (var part in parts)
+            {
+                var id = part.GetHashCode();
+                if (current.TryGetChild(id, out var child))
+                {
+                    current = child;
+                }
+                else
+                {
+                    // add new node
+                    var newChild = new TreeViewItemData<T>(id, default);
+                    current.AddChild(child);
+                    current = newChild;
+                }
+            }
+        }
+
+        current.AddChild(self);
+    }
+
+    public static void InsertToTreeAtPath<T>(this TreeViewItemData<T> self, TreeViewItemData<T> root, string path, Func<TreeViewItemData<T>, bool> comparer)
+    {
+        var current = root;
+        var parts = path?.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (parts is not null)
+        {
+            foreach (var part in parts)
+            {
+                var id = part.GetHashCode();
+                if (current.TryGetChild(id, out var child))
+                {
+                    current = child;
+                }
+                else
+                {
+                    // add new node
+                    var newChild = new TreeViewItemData<T>(id, default);
+                    current.AddChild(child);
+                    current = newChild;
+                }
+            }
+        }
+
+        current.InsertChildBy(self, comparer);
     }
 }
 

@@ -68,63 +68,19 @@ public sealed class MainManagerEditorWindow : KimeraMenuEditorWindow
             var obj = Activator.CreateInstance(type) as IKimeraUI;
             obj?.OnCreate();
             var attr = type.GetCustomAttribute<MainManagerItemAttribute>();
-            var itemPath = attr.ItemPath;
+            var num = attr.ItemPath.LastIndexOf('/');
+            var name = num is -1 ? attr.ItemPath : attr.ItemPath[(num + 1)..];
+            var id = name.GetHashCode();
+            var path = num is -1 ? "" : attr.ItemPath[..num];
             var priority = attr.Priority;
-            var id = itemPath.GetHashCode();
             priorityMap[id] = priority;
-            var helper = new ItemInsertHelper(id, new KimeraMenuItemData(itemPath, obj), priority);
-            AddItemAtPath(tree, helper, priorityMap);
-        }
-    }
-
-    private readonly struct ItemInsertHelper
-    {
-        public readonly int Id;
-        public readonly KimeraMenuItemData Data;
-        public readonly int Priority;
-
-        public ItemInsertHelper(int id, KimeraMenuItemData data, int priority)
-        {
-            Id = id;
-            Data = data;
-            Priority = priority;
-        }
-    }
-
-    private static void AddItemAtPath(TreeViewItemData<KimeraMenuItemData> node, ItemInsertHelper helper, Dictionary<int, int> priorityMap)
-    {
-        var parent = node;
-        var walker = new PathWalker(helper.Data.Name);
-        while (walker.MoveNext())
-        {
-            var current = walker.Current;
-            foreach (var child in node.children)
-            {
-                if (child.data.Name == current)
-                {
-                    parent = node;
-                    node = child;
-                    goto FindItem;
-                }
-            }
-            EnsurePathAdded(ref node, new KimeraMenuItemData(current.ToString(), helper.Data.Value));
-
-        FindItem:
-            ;
-        }
-
-        var newNode = node.ReplaceData(helper.Data);
-        parent.ReplaceChild(newNode);
-
-        void EnsurePathAdded(ref TreeViewItemData<KimeraMenuItemData> parent, KimeraMenuItemData child)
-        {
-            var newChild = new TreeViewItemData<KimeraMenuItemData>(child.Name.GetHashCode(), child);
-            parent.InsertChildBy(newChild, child =>
+            var data = new KimeraMenuItemData(name, obj);
+            var item = new TreeViewItemData<KimeraMenuItemData>(id, data);
+            item.InsertToTreeAtPath(tree, path, child =>
             {
                 var childPriority = priorityMap.TryGetValue(child.id, out var priority) ? priority : int.MaxValue;
-                return priorityMap[helper.Id] < childPriority;
+                return priorityMap[id] < childPriority;
             });
-            parent = newChild;
         }
     }
 }

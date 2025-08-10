@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace KimerA.Editor;
 
-[MainManagerItem("Config Res", Priority = 10)]
+[MainManagerItem("Config Res", Priority = 0)]
 public sealed class ConfigResManager : IKimeraUI
 {
     public VisualElement RootElement { get; private set; } = new VisualElement();
