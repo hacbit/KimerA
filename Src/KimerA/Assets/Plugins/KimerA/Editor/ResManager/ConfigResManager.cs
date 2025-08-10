@@ -14,7 +14,7 @@ public sealed class ConfigResManager : IKimeraUI
 {
     public VisualElement RootElement { get; private set; } = new VisualElement();
 
-    private EditorStorageSO[] _configStorages;
+    internal List<string> _configStorages { get; private set; }
 
     public void OnCreate()
     {
@@ -24,6 +24,8 @@ public sealed class ConfigResManager : IKimeraUI
 
     public void OnEnable()
     {
+        _configStorages = new[] { "" }.Concat(EditorStorageUtil.GetAllStorageKeys()).ToList();
+
         var root = RootElement;
         var configDropdown = root.Q<DropdownField>("ConfigDropdown");
         var configDisplayTree = root.Q<TreeView>("ConfigDisplayTree");
@@ -32,10 +34,11 @@ public sealed class ConfigResManager : IKimeraUI
 
         configDropdown.RegisterValueChangedCallback(evt =>
         {
-            var selectedStorage = _configStorages.FirstOrDefault(s => s.name == evt.newValue);
-            if (selectedStorage is not null)
+            var selectedKey = _configStorages.FirstOrDefault(s => s == evt.newValue);
+            if (string.IsNullOrEmpty(selectedKey) is false)
             {
-                configDisplayTree.SetRootItems(ResolveAllDebugableValues(selectedStorage));
+                var config = EditorStorageUtil.GetStorage(selectedKey);
+                configDisplayTree.SetRootItems(ResolveAllDebugableValues(config));
             }
             else
             {
@@ -44,33 +47,21 @@ public sealed class ConfigResManager : IKimeraUI
             configDisplayTree.Rebuild();
             configDisplayTree.ExpandAll();
         });
-
-        if (_configStorages.Length > 0)
-        {
-            var first = _configStorages[0];
-            configDisplayTree.SetRootItems(ResolveAllDebugableValues(first));
-            configDisplayTree.Rebuild();
-            configDisplayTree.ExpandAll();
-        }
     }
 
     private void Init(DropdownField dropdown)
     {
-        _configStorages = ResUtil.ResolveConfigResAllAssets<EditorStorageSO>().ToArray();
-        dropdown.choices = _configStorages.Select(s => s.name).ToList();
-        dropdown.value = _configStorages.FirstOrDefault()?.name ?? string.Empty;
+        dropdown.choices = _configStorages;
+        dropdown.value = _configStorages.FirstOrDefault() ?? string.Empty;
     }
 
-    private IList<TreeViewItemData<string>> ResolveAllDebugableValues(EditorStorageSO storage)
+    private IList<TreeViewItemData<string>> ResolveAllDebugableValues(Dictionary<string, object> storage)
     {
         var list = new List<TreeViewItemData<string>>();
-        foreach (var (type, typeData) in storage.m_StorageDatas)
+        foreach (var (name, value) in storage)
         {
-            foreach (var (key, value) in typeData)
-            {
-                var item = new TreeViewItemData<string>(key.GetHashCode(), $"{key} = {JsonConvert.SerializeObject(value)}");
-                list.Add(item);
-            }
+            var item = new TreeViewItemData<string>(name.GetHashCode(), $"{name} = {JsonConvert.SerializeObject(value)}");
+            list.Add(item);
         }
         return list;
     }
