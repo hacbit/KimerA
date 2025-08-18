@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:GroupBox style="flex-direction: row;">
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ItemName" />
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ItemPath" />
+        </ui:VisualElement>
+        <uie:ToolbarButton text="打&#10;开" parse-escape-sequences="true" display-tooltip-when-elided="true" name="OpenButton" style="-unity-font-style: bold; -unity-text-align: middle-center;" />
+        <uie:ToolbarButton text="收&#10;藏" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StarButton" style="-unity-font-style: bold; -unity-text-align: middle-center; flex-direction: column; -unity-font: url(&quot;project://database/Library/unity%20default%20resources?fileID=10102&amp;guid=0000000000000000e000000000000000&amp;type=0#LegacyRuntime&quot;); -unity-font-definition: initial;" />
+    </ui:GroupBox>
+</ui:UXML>

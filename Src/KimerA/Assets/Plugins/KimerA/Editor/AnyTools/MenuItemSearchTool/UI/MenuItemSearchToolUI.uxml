@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <KimerA.Editor.UI.TwoPaneSplitView_Helper>
+        <ui:VisualElement name="SearchArea" style="width: 30%;">
+            <ui:TextField picking-mode="Ignore" name="SearchField" />
+            <ui:ListView name="SearchResult" virtualization-method="DynamicHeight" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement>
+            <KimerA.Editor.UI.TwoPaneSplitView_Helper orientation="Vertical">
+                <ui:VisualElement />
+                <ui:VisualElement />
+            </KimerA.Editor.UI.TwoPaneSplitView_Helper>
+        </ui:VisualElement>
+    </KimerA.Editor.UI.TwoPaneSplitView_Helper>
+</ui:UXML>
