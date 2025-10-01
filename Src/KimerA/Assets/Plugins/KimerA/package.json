@@ -9,6 +9,6 @@
     "license": "MIT",
     "category": "Framework",
     "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "*"
+        "com.unity.nuget.newtonsoft-json": "^3.2.1"
     }
 }
